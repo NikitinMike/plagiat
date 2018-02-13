@@ -21,9 +21,6 @@ public class BinaryTree {
 
     BinaryTree.Node root;
     int count=0;
-
-//    BinaryTree() {root=new Node(0, "");}
-//    BinaryTree(long key, String name) {root=new Node(key, name);}
     
     class Node {
         long id;
@@ -39,9 +36,6 @@ public class BinaryTree {
         
         public String toString() {
             return name+"("+id+")";
-//            return name + ":" + cnt;
-//            return name + " has the key " + key;            
-//            return name+" has the key "+key+" Left:"+left+" Right:"+right+"\n";
         }
         
         int compareTo(Node a){
@@ -107,11 +101,10 @@ public class BinaryTree {
         return focusNode;
     }
     
-    public static Link link;
+    public static Link link = new Link();        // URL
 
     public static void main(String[] args) throws Exception {
         
-        link = new Link();        // URL
         String URL="https://ru.wikipedia.org/wiki/%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:%D0%A1%D0%BB%D1%83%D1%87%D0%B0%D0%B9%D0%BD%D0%B0%D1%8F_%D1%81%D1%82%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0";
         String site = getHTML(URL);
         
@@ -123,6 +116,7 @@ public class BinaryTree {
         System.out.println("Tesaurus: "+theTree.count); // words        
         
         Long wc=0L;
+//        em.getTransaction().begin();
         for (String w:site.replaceAll("[^а-яёА-ЯЁ]"," ").split("\\s+")) // \\p{Alpha}
             if (w.length()>2) {
                 wc++;
@@ -136,17 +130,18 @@ public class BinaryTree {
                     em.getTransaction().commit();
 //                    System.out.print("~"+word);
                     theTree.addNode(word.getId(),word.getWord());
-//                    em.getTransaction().begin();
+                    em.getTransaction().begin();
                     em.persist(new Article(link.getId(),word.getId(),wc));
-//                    em.getTransaction().commit();
+                    em.getTransaction().commit();
                 } else {
 //                    System.out.print(n);
-//                    em.getTransaction().begin();
+                    em.getTransaction().begin();
                     em.persist(new Article(link.getId(),n.id,wc));
-//                    em.getTransaction().commit();
+                    em.getTransaction().commit();
                 }
 //                System.out.print(", ");                
             }
+//        em.getTransaction().commit();
         System.out.println("WordsCount: "+wc);
         
 //        System.out.println("inOrderTraverseTree");
@@ -178,13 +173,12 @@ public class BinaryTree {
 //        list.sort((Node a,Node b)-> {return b.compareTo(a);});
 //        System.out.println(list);
         
-//        System.out.println(article.toString());
-//        System.out.println(word.toString());
+        List<Link> Links = em.createQuery("select w from Link w").getResultList();
+        for (Link link : Links) System.out.println(link);
 
         em.close();        
-        
+ 
     }
-        
 
    public static String getHTML(String urlToRead) throws Exception {
       StringBuilder result = new StringBuilder();      
