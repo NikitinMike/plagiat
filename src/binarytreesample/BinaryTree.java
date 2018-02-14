@@ -103,8 +103,7 @@ public class BinaryTree {
     
     public static Link link = new Link();        // URL
 
-    public static void main(String[] args) throws Exception {
-        
+    public static void scaner() throws Exception {
         String URL="https://ru.wikipedia.org/wiki/%D0%A1%D0%BB%D1%83%D0%B6%D0%B5%D0%B1%D0%BD%D0%B0%D1%8F:%D0%A1%D0%BB%D1%83%D1%87%D0%B0%D0%B9%D0%BD%D0%B0%D1%8F_%D1%81%D1%82%D1%80%D0%B0%D0%BD%D0%B8%D1%86%D0%B0";
         String site = getHTML(URL);
         
@@ -142,7 +141,14 @@ public class BinaryTree {
 //                System.out.print(", ");                
             }
 //        em.getTransaction().commit();
-        System.out.println("WordsCount: "+wc);
+        System.out.println("WordsCount: "+wc);        
+        System.out.println("AllWords: "+theTree.count);
+//        em.close();
+    }
+
+    public static void main(String[] args) throws Exception {
+        
+        scaner();
         
 //        System.out.println("inOrderTraverseTree");
 //        theTree.inOrderTraverseTree(theTree.root);
@@ -164,20 +170,20 @@ public class BinaryTree {
 //        System.out.println("ListSize: " + list.size());
 //        list.sort((a,b)->b.cnt-a.cnt);
 //        theTree.list(list,theTree.root);
-
-        System.out.println("AllWords: "+theTree.count);
         
 //    Comparator<Node> comp = (Node a, Node b) -> {return b.compareTo(a);};
 //        list.sort((Node a,Node b)-> b.cnt-a.cnt);
 //        list.sort((Node a,Node b)-> {return b.cnt-a.cnt;});
 //        list.sort((Node a,Node b)-> {return b.compareTo(a);});
 //        System.out.println(list);
-        
-        List<Link> Links = em.createQuery("select w from Link w").getResultList();
-        for (Link link : Links) System.out.println(link);
 
-        em.close();        
- 
+        List<Link> Links = em.createQuery("select w from Link w").getResultList();
+//        for (Link link: Links) System.out.println(Links);
+//            System.out.print(link.words);
+        
+        List <Article> articles = em.createQuery("select a from Article a").getResultList();
+//        for(Article art: articles) System.out.print(art+", ");
+        
     }
 
    public static String getHTML(String urlToRead) throws Exception {
